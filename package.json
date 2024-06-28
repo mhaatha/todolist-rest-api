@@ -1,0 +1,31 @@
+{
+  "name": "todolist-rest-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mhaatha/todolist-rest-api.git"
+  },
+  "author": "mhaatha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mhaatha/todolist-rest-api/issues"
+  },
+  "homepage": "https://github.com/mhaatha/todolist-rest-api#readme",
+  "directories": {
+    "doc": "docs"
+  },
+  "description": "",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.14.9",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
