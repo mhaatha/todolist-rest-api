@@ -1,0 +1,1035 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Todolist REST API",
+    "version": "1.0.0",
+    "description": "OpenAPI for my simple todolist REST API",
+    "termsOfService": "https://github.com/mhaatha",
+    "contact": {
+      "name": "Hafidz Athaya",
+      "email": "mhafidza528@gmail.com",
+      "url": "https://github.com/mhaatha"
+    },
+    "license": {
+      "name": "APACHE 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Development"
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "PUBLIC API"
+        ],
+        "summary": "Register an user",
+        "description": "Create an user without login first",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSchemaRequest"
+              },
+              "examples": {
+                "user1": {
+                  "$ref": "#/components/examples/User1Password"
+                },
+                "user2": {
+                  "$ref": "#/components/examples/User2Password"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/RegisterUserResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/UserPostResponseFailed"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "PUBLIC API"
+        ],
+        "summary": "Login to an existing user",
+        "description": "Login to an existing user without login first",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSchemaRequest"
+              },
+              "examples": {
+                "user1": {
+                  "$ref": "#/components/examples/User1Password"
+                },
+                "user2": {
+                  "$ref": "#/components/examples/User2Password"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/LoginUserResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/FailedLoginResponse"
+          }
+        }
+      }
+    },
+    "/todolists": {
+      "get": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Todolist"
+        ],
+        "summary": "Get all todolists",
+        "description": "Get all exist todolists by default",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IncludeDoneParameter"
+          },
+          {
+            "$ref": "#/components/parameters/NameParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetSuccessResponses"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponses"
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Todolist"
+        ],
+        "summary": "Create new todolist",
+        "description": "Create new todolist to database",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrUpdateTodolist"
+              },
+              "examples": {
+                "nodejs": {
+                  "$ref": "#/components/examples/NodeJsCreateOrUpdateExample"
+                },
+                "php": {
+                  "$ref": "#/components/examples/PhpCreateOrUpdateExample"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "$ref": "#/components/responses/PostSuccessResponses"
+          },
+          "400": {
+            "$ref": "#/components/responses/PostFailedResponses"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponses"
+          }
+        }
+      }
+    },
+    "/todolists/{todolistId}": {
+      "put": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Todolist"
+        ],
+        "summary": "Update exist todolist",
+        "description": "Update exist todolist in database",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParameter"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrUpdateTodolist"
+              },
+              "examples": {
+                "nodejs": {
+                  "$ref": "#/components/examples/NodeJsCreateOrUpdateExample"
+                },
+                "php": {
+                  "$ref": "#/components/examples/PhpCreateOrUpdateExample"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/PutSuccessResponses"
+          },
+          "400": {
+            "$ref": "#/components/responses/PutFailedResponses"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponses"
+          },
+          "404": {
+            "$ref": "#/components/responses/PutNotFoundResponses"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "Todolist"
+        ],
+        "summary": "Delete exists todolist",
+        "description": "Delete exists todolist in database",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DeleteSuccessResponses"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorResponses"
+          },
+          "404": {
+            "$ref": "#/components/responses/DeleteNotFoundResponses"
+          }
+        }
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "User"
+        ],
+        "summary": "Get user by id",
+        "description": "Get user by id from database",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserIdParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GetUserByIdSuccessResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/GetUserByIdFailedResponse"
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "User"
+        ],
+        "summary": "Update user by id",
+        "description": "Update user by id from database",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserIdParameter"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSchemaRequest"
+              },
+              "examples": {
+                "user1": {
+                  "$ref": "#/components/examples/User1Password"
+                },
+                "user2": {
+                  "$ref": "#/components/examples/User2Password"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SuccessPutUser"
+          },
+          "400": {
+            "$ref": "#/components/responses/FailedPutUser"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundPutUser"
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "tags": [
+          "User"
+        ],
+        "summary": "Delete user by id",
+        "description": "Delete user by id from database",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UserIdParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/DeleteSuccessResponses"
+          },
+          "404": {
+            "$ref": "#/components/responses/DeleteNotFoundResponses"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "description": "JWT Access Token for Todolist REST API",
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "parameters": {
+      "IncludeDoneParameter": {
+        "name": "include_done",
+        "in": "query",
+        "required": false,
+        "description": "Is include done todolist",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "NameParameter": {
+        "name": "name",
+        "in": "query",
+        "required": false,
+        "description": "Filter todolist by name",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      },
+      "IdParameter": {
+        "name": "todolistId",
+        "in": "path",
+        "required": true,
+        "description": "Todolist id for update todolist",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "examples": {
+          "nodejs": {
+            "description": "Sample todolist id for NodeJs",
+            "value": "1"
+          },
+          "php": {
+            "description": "Sample todolist id for PHP",
+            "value": "2"
+          }
+        }
+      },
+      "UserIdParameter": {
+        "name": "userId",
+        "in": "path",
+        "required": true,
+        "description": "User id for get, update, and delete user",
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "examples": {
+          "user1": {
+            "description": "Sample user id for user1",
+            "value": 1
+          },
+          "user2": {
+            "description": "Sample user id for user2",
+            "value": 2
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ResponseTodolist": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CreateOrUpdateTodolist": {
+        "type": "object",
+        "required": [
+          "name",
+          "priority"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          },
+          "tags": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "ArrayResponseTodolist": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ResponseTodolist"
+        }
+      },
+      "UserSchemaRequest": {
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 36
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
+      "RegisterUserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 36
+          },
+          "accessToken": {
+            "type": "string",
+            "format": "token"
+          },
+          "refreshToken": {
+            "type": "string",
+            "format": "token"
+          }
+        }
+      },
+      "LoginUserResponse": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "format": "token"
+          }
+        }
+      }
+    },
+    "examples": {
+      "GetAllDataExample": {
+        "description": "Example success get all todolists",
+        "value": [
+          {
+            "id": "1",
+            "name": "NodeJs",
+            "priority": 3,
+            "tags": [
+              "NodeJs",
+              "JavaScript",
+              "Programming"
+            ]
+          },
+          {
+            "id": "2",
+            "name": "PHP",
+            "priority": 2,
+            "tags": [
+              "PHP",
+              "Programming"
+            ]
+          }
+        ]
+      },
+      "GetNoDataExample": {
+        "description": "Example success but data is empty",
+        "value": []
+      },
+      "NodeJsCreateOrUpdateExample": {
+        "description": "Example create todolist NodeJs",
+        "value": {
+          "name": "NodeJs",
+          "priority": 3,
+          "tags": [
+            "NodeJs",
+            "JavaScript",
+            "Programming"
+          ]
+        }
+      },
+      "PhpCreateOrUpdateExample": {
+        "description": "Example create todolist PHP",
+        "value": {
+          "name": "PHP",
+          "priority": 2,
+          "tags": [
+            "PHP",
+            "Programming"
+          ]
+        }
+      },
+      "User1Password": {
+        "description": "Example create or login user 1",
+        "value": {
+          "username": "johndoe",
+          "password": "secretPassword_{123}"
+        }
+      },
+      "User2Password": {
+        "description": "Example create or login user 2",
+        "value": {
+          "username": "janedoe",
+          "password": "supersecretPassword_{123}"
+        }
+      }
+    },
+    "responses": {
+      "GetSuccessResponses": {
+        "description": "Success get all todolists",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ArrayResponseTodolist"
+            },
+            "examples": {
+              "success - data exists": {
+                "$ref": "#/components/examples/GetAllDataExample"
+              },
+              "succcess - data does not exists": {
+                "$ref": "#/components/examples/GetNoDataExample"
+              }
+            }
+          }
+        }
+      },
+      "PostSuccessResponses": {
+        "description": "Success create todolist",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseTodolist"
+            },
+            "examples": {
+              "nodejs": {
+                "description": "Success create NodeJs todolist",
+                "value": {
+                  "id": "1",
+                  "name": "NodeJs",
+                  "priority": 3,
+                  "tags": [
+                    "NodeJs",
+                    "JavaScript",
+                    "Programming"
+                  ]
+                }
+              },
+              "php": {
+                "description": "Success create PHP todolist",
+                "value": {
+                  "id": "2",
+                  "name": "PHP",
+                  "priority": 2,
+                  "tags": [
+                    "PHP",
+                    "Programming  "
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "PostFailedResponses": {
+        "description": "Failed create todolist",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "failed - bad request": {
+                "description": "Example failed bad request",
+                "value": {
+                  "message": "name or priority must not blank"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PutSuccessResponses": {
+        "description": "Success update todolist",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseTodolist"
+            },
+            "examples": {
+              "nodejs": {
+                "description": "Success update NodeJs todolist",
+                "value": {
+                  "id": "1",
+                  "name": "NodeJs",
+                  "priority": 3,
+                  "tags": [
+                    "NodeJs",
+                    "JavaScript",
+                    "Programming"
+                  ]
+                }
+              },
+              "php": {
+                "description": "Success update PHP todolist",
+                "value": {
+                  "id": "2",
+                  "name": "PHP",
+                  "priority": 2,
+                  "tags": [
+                    "PHP",
+                    "Programming  "
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "PutFailedResponses": {
+        "description": "Failed update todolist",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "failed - bad request": {
+                "description": "Example failed bad request",
+                "value": {
+                  "message": "name or priority must not blank"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PutNotFoundResponses": {
+        "description": "Failed update todolist",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "failed - id not found": {
+                "description": "Example failed id not found",
+                "value": {
+                  "message": "id not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "DeleteSuccessResponses": {
+        "description": "Success delete todolist",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "succcess": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "examples": {
+              "succcess": {
+                "description": "Success delete todolist",
+                "value": {
+                  "succcess": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "DeleteNotFoundResponses": {
+        "description": "Failed delete not found todolist",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "succcess": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "examples": {
+              "failed": {
+                "description": "Failed delete todolist",
+                "value": {
+                  "succcess": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "UnauthorizedErrorResponses": {
+        "description": "Access token is missing or invalid",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "failed - unauthorized": {
+                "description": "Example failed unauthorized",
+                "value": {
+                  "message": "unauthorized"
+                }
+              }
+            }
+          }
+        }
+      },
+      "RegisterUserResponse": {
+        "description": "Success create new user and generate new JWT Token",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RegisterUserResponse"
+            },
+            "examples": {
+              "user1": {
+                "description": "Success create user1",
+                "value": {
+                  "id": "1",
+                  "username": "johndoe",
+                  "accessToken": "imagine this is JWT access token",
+                  "refreshToken": "xRxGGEpVawiUak6He367W3oeOfh+3irw+1G1h1jc"
+                }
+              },
+              "user2": {
+                "description": "Success create user2",
+                "value": {
+                  "id": "2",
+                  "username": "janedoe",
+                  "accessToken": "imagine this is JWT access token",
+                  "refreshToken": "xRxGGEpVawiUak6He367W3oeOfh+3irw+1G1h1jc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UserPostResponseFailed": {
+        "description": "Failed create user",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "failed - bad request": {
+                "description": "Example failed bad request",
+                "value": {
+                  "message": "username or password must not blank"
+                }
+              }
+            }
+          }
+        }
+      },
+      "LoginUserResponse": {
+        "description": "Success login and refresh JWT Token",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/LoginUserResponse"
+            },
+            "examples": {
+              "user1": {
+                "description": "Success create user1",
+                "value": {
+                  "refreshToken": "xRxGGEpVawiUak6He367W3oeOfh+3irw+1G1h1jc"
+                }
+              },
+              "user2": {
+                "description": "Success create user2",
+                "value": {
+                  "refreshToken": "xRxGGEpVawiUak6He367W3oeOfh+3irw+1G1h1jc"
+                }
+              }
+            }
+          }
+        }
+      },
+      "FailedLoginResponse": {
+        "description": "Failed login",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "failed - bad request": {
+                "description": "Example failed bad request",
+                "value": {
+                  "message": "username or password is wrong"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetUserByIdSuccessResponse": {
+        "description": "Success get user by id",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "username": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "succcess": {
+                "description": "Success get user by id",
+                "value": {
+                  "id": "1",
+                  "username": "johndoe"
+                }
+              }
+            }
+          }
+        }
+      },
+      "GetUserByIdFailedResponse": {
+        "description": "Failed get user by id",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "failed": {
+                "description": "Failed get user by id",
+                "value": {
+                  "message": "id not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SuccessPutUser": {
+        "description": "Success update user",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UserSchemaRequest"
+            },
+            "examples": {
+              "success": {
+                "description": "Success update user",
+                "value": {
+                  "username": "johndoe",
+                  "password": "supersecretPassword_{123}"
+                }
+              }
+            }
+          }
+        }
+      },
+      "FailedPutUser": {
+        "description": "Failed update user",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "failed": {
+                "description": "Failed update user",
+                "value": {
+                  "message": "username or password must not blank"
+                }
+              }
+            }
+          }
+        }
+      },
+      "NotFoundPutUser": {
+        "description": "Failed id not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "failed": {
+                "description": "Failed update user by id",
+                "value": {
+                  "message": "id not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
