@@ -1,8 +1,7 @@
 import express, { Request, Response } from 'express';
+const todolistRoute = express.Router();
 
-const router = express.Router();
-
-router.route('/api/v1/todolists')
+todolistRoute.route('/')
   .get((req: Request, res: Response) => {
     res.send('GET ALL TODOLISTS');
   })
@@ -10,7 +9,7 @@ router.route('/api/v1/todolists')
     res.send('CREATE TODOLIST');
   });
 
-router.route('/api/v1/todolists/:todolistId')
+todolistRoute.route('/:todolistId')
   .put((req: Request, res: Response) => {
     res.send('UPDATE TODOLIST BY ID');
   })
@@ -18,4 +17,4 @@ router.route('/api/v1/todolists/:todolistId')
     res.send('DELETE TODOLIST BY ID');
   });
 
-export default router;
+export default todolistRoute;

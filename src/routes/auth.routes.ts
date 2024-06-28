@@ -1,13 +1,12 @@
 import express, { Request, Response } from 'express';
+const authRoute = express.Router();
 
-const router = express.Router();
-
-router.post('/api/v1/register', (req: Request, res: Response) => {
+authRoute.post('/register', (req: Request, res: Response) => {
   res.send('REGISTER');
-});
+}); 
 
-router.post('/api/v1/login', (req: Request, res: Response) => {
+authRoute.post('/login', (req: Request, res: Response) => {
   res.send('LOGIN');
 });
-
-export default router;  
+  
+export default authRoute;   

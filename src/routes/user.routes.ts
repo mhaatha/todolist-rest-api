@@ -1,8 +1,7 @@
 import express, { Request, Response } from 'express';
+const userRoute = express.Router();
 
-const router = express.Router();
-
-router.route('/api/v1/users/:userId')
+userRoute.route('/:userId')
   .get((req: Request, res: Response) => {
     res.send('GET USER BY ID');
   })
@@ -13,4 +12,4 @@ router.route('/api/v1/users/:userId')
     res.send('DELETE USER BY ID');
   });
 
-export default router;
+export default userRoute;
