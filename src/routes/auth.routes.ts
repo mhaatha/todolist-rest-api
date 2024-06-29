@@ -1,12 +1,8 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import { authRegister, authLogin } from '../controllers/auth.controllers'; 
 const authRoute = express.Router();
 
-authRoute.post('/register', (req: Request, res: Response) => {
-  res.send('REGISTER');
-}); 
-
-authRoute.post('/login', (req: Request, res: Response) => {
-  res.send('LOGIN');
-});
+authRoute.post('/register', authRegister); 
+authRoute.post('/login', authLogin);
   
 export default authRoute;   
