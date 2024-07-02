@@ -3,9 +3,16 @@ import express from 'express';
 import router from './routes';
 import { errorMiddleware } from './middlewares/error.middleware';
 import { logger } from './configs/logger';
+import { successHandler, errorHandler } from './configs/morgan';
 
 const app = express();                                
 const port = config.port || 3000;
+
+// Middleware Morgan Logging
+if (config.env !== 'test') {
+  app.use(successHandler);
+  app.use(errorHandler);
+}
 
 // Middleware Parsing JSON
 app.use(express.json());
