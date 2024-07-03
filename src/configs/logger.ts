@@ -8,6 +8,7 @@ const enumerateErrorFormat = winston.format((info) => {
   return info;
 });
 
+// Meta is prisma property for error
 const customFormat = winston.format.printf(({ level, message, meta }) => {
   let metaString = meta ? `\n${JSON.stringify(meta, null, 2)}` : '' ;
   return `${level}: ${message} ${metaString}`
