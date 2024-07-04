@@ -1,32 +1,51 @@
 import config from './configs/config';
-import express from 'express';
-import router from './routes';
-import { errorMiddleware } from './middlewares/error.middleware';
 import { logger } from './configs/logger';
-import { successHandler, errorHandler } from './configs/morgan';
+import { app } from './app';
+import { prisma } from '../prisma';
+import { IncomingMessage, Server, ServerResponse } from 'http';
 
-const app = express();                                
-const port = config.port || 3000;
+let server: Server<typeof IncomingMessage, typeof ServerResponse> | undefined;
+let port: number = config.port;
 
-// Middleware Morgan Logging
-if (config.env !== 'test') {
-  app.use(successHandler);
-  app.use(errorHandler);
+if (prisma) {
+  logger.info('Connected to Database');
+  server = app.listen(port, () => {
+    logger.info(`Server listening on http://localhost:${port}`);
+  });
 }
 
-// Middleware Parsing JSON
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const exitHandler = (): void => {
+  if (server) {
+    server.close(() => {
+      logger.info('Server closed');
+      process.exit(1);
+    });
+  } else {
+    process.exit(1);
+  }
+}
 
-app.get('/', (req, res) => {
-  res.send('Server is online');
-});   
+const unexpectedErrorHandler = (error: Error): void => {
+  logger.error(error.message);
+  exitHandler();
+}
 
-app.use('/api/v1', router);   
+process.on('uncaughtException', unexpectedErrorHandler);
+process.on('unhandledRejection', (reason) => {
+  if (reason instanceof Error) {
+    unexpectedErrorHandler(reason);
+  } else {
+    logger.error(`Unhandled rejection: ${reason}`);
+    exitHandler();
+  }
+});
 
-// Middleware Error Handling
-app.use(errorMiddleware);
-
-app.listen(port, () => {
-  logger.info(`Server listening on http://localhost:${port}`);
+process.on('SIGTERM', () => {
+  logger.info('SIGTERM received');
+  if (server) {
+    server.close(() => {
+      logger.info('Server closed on SIGTERM');
+      process.exit(0);
+    });
+  }
 });
