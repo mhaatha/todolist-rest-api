@@ -6,9 +6,10 @@ import { validate } from '../validations/validation';
 import * as authValidation from '../validations/auth-validation';
 import { ResponseError } from '../utils/response-error';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { User } from '@prisma/client';
 
 export const register = async (data: userModel.RegisterAndLoginRequest): Promise<userModel.RegisterResponse> => {
-  const registerRequest: userModel.RegisterAndLoginRequest = validate(authValidation.register, data);
+  const registerRequest: userModel.RegisterAndLoginRequest = validate(authValidation.registerAndLogin, data);
 
   // VALIDATION: Cannot have the same username
   const totalUserWithSameUsername: number = await prisma.user.count({
@@ -31,4 +32,26 @@ export const register = async (data: userModel.RegisterAndLoginRequest): Promise
   });
 
   return userModel.toAuthResponse(user);
+}
+
+export const login = async (data: userModel.RegisterAndLoginRequest): Promise<User> => {
+  const loginRequest: userModel.RegisterAndLoginRequest = validate(authValidation.registerAndLogin, data);
+
+  // VALIDATION: Is username exists in the database
+  const user = await prisma.user.findUnique({
+    where: {
+      username: loginRequest.username
+    }
+  }); 
+  if (!user) {
+    throw new ResponseError(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, 'Username or password is incorrect');
+  }
+  
+  // VALIDATION: Is password correct
+  const isMatch = await bcrypt.compare(loginRequest.password, user.password);
+  if (!isMatch) {
+    throw new ResponseError(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, 'Username or password is incorrect');
+  }
+
+  return user;
 }
