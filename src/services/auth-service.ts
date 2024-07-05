@@ -7,8 +7,8 @@ import * as authValidation from '../validations/auth-validation';
 import { ResponseError } from '../utils/response-error';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
-export const register = async (data: userModel.CreateUserRequest): Promise<userModel.CreateUserResponse> => {
-  const registerRequest: userModel.CreateUserRequest = validate(authValidation.register, data);
+export const register = async (data: userModel.RegisterAndLoginRequest): Promise<userModel.RegisterResponse> => {
+  const registerRequest: userModel.RegisterAndLoginRequest = validate(authValidation.register, data);
 
   // VALIDATION: Cannot have the same username
   const totalUserWithSameUsername: number = await prisma.user.count({

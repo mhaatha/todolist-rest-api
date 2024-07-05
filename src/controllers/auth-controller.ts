@@ -5,8 +5,8 @@ import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data: model.CreateUserRequest = req.body;
-    const response: model.CreateUserResponse = await service.register(data);
+    const data: model.RegisterAndLoginRequest = req.body;
+    const response: model.RegisterResponse = await service.register(data);
 
     return res.status(StatusCodes.CREATED).json({
       status: ReasonPhrases.CREATED,
@@ -18,6 +18,10 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
   }
 }
 
-export const login = async (req: Request, res: Response) => {
-  res.send('LOGIN');
+export const login = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data: model.RegisterAndLoginRequest = req.body;
+  } catch (error) {
+    next(error);
+  }
 }
