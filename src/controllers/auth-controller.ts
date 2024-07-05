@@ -1,13 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
-import * as model from '../models/auth.model';
-import * as service from '../services/auth.service';
+import * as model from '../models/auth-model';
+import * as service from '../services/auth-service';
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data: model.CreateUserRequest = req.body;
-    const response = await service.register(data);
-    return res.status(201).json({
-      status: 201,
+    const response: model.CreateUserResponse = await service.register(data);
+
+    return res.status(StatusCodes.CREATED).json({
+      status: ReasonPhrases.CREATED,
       message: 'Success create user',
       data: response
     });
