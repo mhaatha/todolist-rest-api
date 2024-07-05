@@ -5,10 +5,15 @@ import { ResponseError } from '../utils/response-error';
 
 export const errorHandler = (err: ResponseError, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof ZodError) {
+    const errors = err.issues.map(issue => ({
+      path: issue.path.join('.'),
+      message: issue.message
+    }));
+
     res.status(StatusCodes.BAD_REQUEST).json({
       status: StatusCodes.BAD_REQUEST,
       error: ReasonPhrases.BAD_REQUEST,
-      message: err.issues[0].message
+      message: errors
     });
   } else if (err instanceof ResponseError) {
     res.status(StatusCodes.BAD_REQUEST).json({
