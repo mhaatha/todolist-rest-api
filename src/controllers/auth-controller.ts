@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
 import * as model from '../models/auth-model';
 import * as service from '../services/auth-service';
 import * as tokenService from '../services/token-service';
-import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { User } from '@prisma/client';
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
+import { Request, Response, NextFunction } from 'express';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
