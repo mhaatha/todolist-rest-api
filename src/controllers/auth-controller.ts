@@ -30,8 +30,9 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       status: ReasonPhrases.OK,
       message: 'Login success',
       data: {
-        token: response
-      }
+        username: user.username
+      },
+      tokens: response
     });
   } catch (error) {
     next(error);
