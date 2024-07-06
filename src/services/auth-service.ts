@@ -1,13 +1,13 @@
 import * as userModel from '../models/auth-model';
+import * as authValidation from '../validations/auth-validation';
+import bcrypt from 'bcrypt';
 import { prisma } from '../../prisma';
 import { v4 } from 'uuid';
-import bcrypt from 'bcrypt';
 import { validate } from '../validations/validation';
-import * as authValidation from '../validations/auth-validation';
 import { ResponseError } from '../utils/response-error';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { User } from '@prisma/client';
-import { getUserByUsername } from '../services/user-service';
+import { getUserByUsername } from './user-service';
 
 export const register = async (data: userModel.RegisterAndLoginRequest): Promise<userModel.RegisterResponse> => {
   const registerRequest: userModel.RegisterAndLoginRequest = validate(authValidation.registerAndLogin, data);
