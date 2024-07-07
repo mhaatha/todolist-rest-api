@@ -3,8 +3,10 @@ import express from 'express';
 
 const userRoute = express.Router();
 
+userRoute.route('/:username')
+  .get(userController.getUsername);
+
 userRoute.route('/:userId')
-  .get(userController.getId)
   .put(userController.update)
   .delete(userController.deleted);
 
