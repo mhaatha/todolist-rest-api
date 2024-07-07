@@ -32,3 +32,7 @@ export const generateAuthToken = async (user: User) => {
     }
   }
 }
+
+export const verifyToken = async (token: string) => {
+  return jwt.verify(token, config.jwt.secret!);
+}
