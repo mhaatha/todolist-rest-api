@@ -1,8 +1,8 @@
-import * as jwt from "jsonwebtoken";
+import * as jwt from 'jsonwebtoken';
 import moment from 'moment';
-import config from "../configs/config";
-import { User } from "@prisma/client";
-import { tokenTypes } from "../configs/tokens";
+import config from '../configs/config';
+import { User } from '@prisma/client';
+import { tokenTypes } from '../configs/tokens';
 
 export const generateToken = async (userId: string, expires: moment.Moment, type: string, secret = config.jwt.secret!) => {
   const payload = {
