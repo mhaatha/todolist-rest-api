@@ -1,16 +1,16 @@
-import * as userModel from '../models/auth-model';
-import * as authValidation from '../validations/auth-validation';
 import bcrypt from 'bcrypt';
-import { prisma } from '../../prisma';
 import { v4 } from 'uuid';
+import { User } from '@prisma/client';
+import { prisma } from '../../prisma';
 import { validate } from '../validations/validation';
 import { ResponseError } from '../utils/response-error';
-import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { User } from '@prisma/client';
+import { registerAndLogin } from '../validations/user-validation';
 import { getUserByUsername } from './user-service';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { IdUsernameResponse, UsernamePasswordRequest, toAuthResponse } from '../models/user-model';
 
-export const register = async (data: userModel.RegisterAndLoginRequest): Promise<userModel.RegisterResponse> => {
-  const registerRequest: userModel.RegisterAndLoginRequest = validate(authValidation.registerAndLogin, data);
+export const register = async (data: UsernamePasswordRequest): Promise<IdUsernameResponse> => {
+  const registerRequest: UsernamePasswordRequest = validate(registerAndLogin, data);
 
   // VALIDATION: Cannot have the same username
   const totalUserWithSameUsername: User | null = await getUserByUsername(registerRequest.username);
@@ -28,10 +28,10 @@ export const register = async (data: userModel.RegisterAndLoginRequest): Promise
     }
   });
 
-  return userModel.toAuthResponse(user);
+  return toAuthResponse(user);
 }
 
-export const login = async (data: userModel.RegisterAndLoginRequest): Promise<User> => {
+export const login = async (data: UsernamePasswordRequest): Promise<User> => {
   // VALIDATION: Is username exists in the database
   const user: User | null = await getUserByUsername(data.username);
   if (!user) {
