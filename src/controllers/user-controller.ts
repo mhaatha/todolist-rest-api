@@ -3,6 +3,7 @@ import { User } from '@prisma/client';
 import { ResponseError } from '../utils/response-error';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { Request, Response, NextFunction } from 'express';
+import { IdUsernameResponse, UsernamePasswordRequest } from '../models/user-model';
 
 export const getUsername = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -25,9 +26,9 @@ export const getUsername = async (req: Request, res: Response, next: NextFunctio
 
 export const update = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const bodyData = req.body;
+    const bodyData: UsernamePasswordRequest = req.body;
     const { userId } = req.params;
-    const response = await service.update(bodyData, { userId });
+    const response: IdUsernameResponse = await service.update(bodyData, userId);
 
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
@@ -39,9 +40,16 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
-export const deleted = (req: Request, res: Response, next: NextFunction) => {
+export const deleted = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const { userId } = req.params;
+    await service.deleted(userId);
 
+    return res.status(StatusCodes.OK).json({
+      status: ReasonPhrases.OK,
+      message: 'Success deleted user',
+      data: null
+    });
   } catch (error) {
     next(error);
   }
