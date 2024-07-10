@@ -17,7 +17,10 @@ export const getUsername = async (req: Request, res: Response, next: NextFunctio
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
       message: 'Success get username',
-      data: response
+      data: {
+        id: response.id,
+        username: response.username
+      }
     });
   } catch (error) {
     next(error);
