@@ -5,8 +5,8 @@ import { auth } from '../middlewares/auth-middleware';
 const todolistRoute = express.Router();
 
 todolistRoute.route('/')
-  .get(auth, todolistController.getAll)
-  .post(auth, todolistController.create);
+  .post(auth, todolistController.create)
+  .get(auth, todolistController.getAll);
 
 todolistRoute.route('/:todolistId')
   .put(auth, todolistController.update)
