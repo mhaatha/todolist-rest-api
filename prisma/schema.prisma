@@ -24,7 +24,7 @@ model Todolist {
   id         String    @unique
   name       String
   priority   Int
-  tags       String    @default("[]") // Save as JSON strings 
+  tags       String?   @default("[]") // We will fix this
   user       User      @relation(fields: [userId], references: [id])
   userId     String
   createdAt  DateTime  @default(now())
