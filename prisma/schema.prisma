@@ -21,7 +21,7 @@ model User {
 }
 
 model Todolist {
-  id         Int       @id @default(autoincrement())
+  id         String    @unique
   name       String
   priority   Int
   tags       String    @default("[]") // Save as JSON strings 
