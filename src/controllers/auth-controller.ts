@@ -30,6 +30,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       status: ReasonPhrases.OK,
       message: 'Login success',
       data: {
+        id: user.id,
         username: user.username
       },
       tokens: response
