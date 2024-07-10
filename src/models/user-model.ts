@@ -20,7 +20,3 @@ export function toAuthResponse(user: User): IdUsernameResponse {
 export interface UsernameSchema {
   username: string;
 }
-
-export interface UserIdSchema {
-  userId: string;
-}
