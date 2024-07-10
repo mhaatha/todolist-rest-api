@@ -1,13 +1,14 @@
 import * as userController from '../controllers/user-controller';
 import express from 'express';
+import { auth } from '../middlewares/auth-middleware';
 
 const userRoute = express.Router();
 
 userRoute.route('/:username')
-  .get(userController.getUsername);
+  .get(auth, userController.getUsername);
 
 userRoute.route('/:userId')
-  .put(userController.update)
-  .delete(userController.deleted);
+  .put(auth, userController.update)
+  .delete(auth, userController.deleted);
 
 export default userRoute;
