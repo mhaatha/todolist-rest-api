@@ -1,19 +1,20 @@
 import express, { Request, Response } from 'express';
+import { auth } from '../middlewares/auth-middleware';
 const todolistRoute = express.Router();
 
 todolistRoute.route('/')
-  .get((req: Request, res: Response) => {
+  .get(auth, (req: Request, res: Response) => {
     res.send('GET ALL TODOLISTS');
   })
-  .post((req: Request, res: Response) => {
+  .post(auth, (req: Request, res: Response) => {
     res.send('CREATE TODOLIST');
   });
 
 todolistRoute.route('/:todolistId')
-  .put((req: Request, res: Response) => {
+  .put(auth,(req: Request, res: Response) => {
     res.send('UPDATE TODOLIST BY ID');
   })
-  .delete((req: Request, res: Response) => {
+  .delete(auth, (req: Request, res: Response) => {
     res.send('DELETE TODOLIST BY ID');
   });
 
