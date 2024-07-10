@@ -419,7 +419,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "name": {
             "type": "string"
@@ -433,6 +434,18 @@
             "items": {
               "type": "string"
             }
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -440,7 +453,8 @@
         "type": "object",
         "required": [
           "name",
-          "priority"
+          "priority",
+          "userId"
         ],
         "properties": {
           "name": {
@@ -459,6 +473,10 @@
               "type": "string",
               "minLength": 1
             }
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
           }
         }
       },
@@ -555,7 +573,8 @@
             "NodeJs",
             "JavaScript",
             "Programming"
-          ]
+          ],
+          "userId": "0db0f329-80fe-4005-b82a-f8d134708669"
         }
       },
       "PhpCreateOrUpdateExample": {
@@ -566,7 +585,8 @@
           "tags": [
             "PHP",
             "Programming"
-          ]
+          ],
+          "userId": "0db0f329-80fe-4005-b82a-f8d134708669"
         }
       },
       "User1Password": {
@@ -614,26 +634,32 @@
               "nodejs": {
                 "description": "Success create NodeJs todolist",
                 "value": {
-                  "id": "1",
+                  "id": "0db0f329-80fe-4005-b82a-f8d134708667",
                   "name": "NodeJs",
                   "priority": 3,
                   "tags": [
                     "NodeJs",
                     "JavaScript",
                     "Programming"
-                  ]
+                  ],
+                  "userId": "0db0f329-80fe-4005-b82a-f8d134708669",
+                  "createdAt": "2022-01-01T00:00:00.000Z",
+                  "updatedAt": "2022-01-01T00:00:00.000Z"
                 }
               },
               "php": {
                 "description": "Success create PHP todolist",
                 "value": {
-                  "id": "2",
+                  "id": "0db0f329-80fe-4005-b82a-f8d134708666",
                   "name": "PHP",
                   "priority": 2,
                   "tags": [
                     "PHP",
                     "Programming  "
-                  ]
+                  ],
+                  "userId": "0db0f329-80fe-4005-b82a-f8d134708669",
+                  "createdAt": "2022-01-01T00:00:00.000Z",
+                  "updatedAt": "2022-01-01T00:00:00.000Z"
                 }
               }
             }
