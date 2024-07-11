@@ -7,8 +7,10 @@ const userRoute = express.Router();
 userRoute.route('/:username')
   .get(auth, userController.getUsername);
 
-userRoute.route('/:userId')
-  .put(auth, userController.update)
+userRoute.route('/update')
+  .put(auth, userController.update);
+
+userRoute.route('/delete')
   .delete(auth, userController.deleted);
 
 export default userRoute;
