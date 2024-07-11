@@ -2,7 +2,7 @@ import * as jwt from 'jsonwebtoken';
 import moment from 'moment';
 import config from '../configs/config';
 import { User } from '@prisma/client';
-import { TokenTypes } from '../models/token-model';
+import { Payload, TokenTypes } from '../models/token-model';
 
 export const generateToken = async (userId: string, expires: moment.Moment, type: string, secret = config.jwt.secret!) => {
   const payload = {
@@ -33,6 +33,6 @@ export const generateAuthToken = async (user: User) => {
   }
 }
 
-export const verifyToken = async (token: string) => {
-  return jwt.verify(token, config.jwt.secret!);
+export const verifyToken = async (token: string): Promise<Payload> => {
+  return jwt.verify(token, config.jwt.secret!) as Payload;
 }
