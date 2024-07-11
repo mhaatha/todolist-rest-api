@@ -1,9 +1,11 @@
 import * as service from '../services/user-service';
 import { User } from '@prisma/client';
+import { UserRequest } from '../types/user-request';
 import { ResponseError } from '../utils/response-error';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { Request, Response, NextFunction } from 'express';
 import { IdUsernameResponse, UsernamePasswordRequest } from '../models/user-model';
+import { Payload } from '../models/token-model';
 
 export const getUsername = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -27,11 +29,17 @@ export const getUsername = async (req: Request, res: Response, next: NextFunctio
   }
 }
 
-export const update = async (req: Request, res: Response, next: NextFunction) => {
+export const update = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
     const bodyData: UsernamePasswordRequest = req.body;
-    const { userId } = req.params;
-    const response: IdUsernameResponse = await service.update(bodyData, userId);
+    const userData: Payload | undefined = req.user as Payload;
+
+    // VALIDATION: Is user authenticated
+    if (userData === undefined) {
+      throw new ResponseError(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, 'Unauthorized');
+    }
+
+    const response: IdUsernameResponse = await service.update(bodyData, userData.sub);
 
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
@@ -43,10 +51,16 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
   }
 }
 
-export const deleted = async (req: Request, res: Response, next: NextFunction) => {
+export const deleted = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
-    const { userId } = req.params;
-    await service.deleted(userId);
+    const userData: Payload | undefined = req.user as Payload;
+
+    // VALIDATION: Is user authenticated
+    if (userData === undefined) {
+      throw new ResponseError(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, 'Unauthorized');
+    }
+
+    await service.deleted(userData.sub);
 
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
