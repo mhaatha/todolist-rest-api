@@ -1,11 +1,11 @@
-import { JwtPayload } from 'jsonwebtoken';
+import { Payload } from '../models/token-model';
 import { verifyToken } from '../services/token-service';
 import { UserRequest } from '../types/user-request';
 import { ResponseError } from '../utils/response-error';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 
-export const auth = async (req: Request, res: Response, next: NextFunction) => {
+export const auth = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers['authorization'];
     if (!authHeader) {
@@ -17,8 +17,8 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
       throw new ResponseError(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, 'Token is missing');
     }
 
-    const decodedPayload: string | JwtPayload = await verifyToken(token);
-    (req as UserRequest).user = decodedPayload; 
+    const decodedPayload: Payload = await verifyToken(token);
+    req.user = decodedPayload; 
     next();
   } catch (error) {
     next(error);
