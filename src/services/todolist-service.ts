@@ -29,7 +29,7 @@ export const create = async (data: TodolistRequest, userId: string): Promise<Tod
   return todolist;
 }
 
-const getTodolistById = async (todolistId: string): Promise<TodolistResponse | null> => {
+export const getTodolistById = async (todolistId: string): Promise<TodolistResponse | null> => {
   return await prisma.todolist.findUnique({
     where: {
       id: todolistId
