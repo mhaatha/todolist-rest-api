@@ -14,19 +14,35 @@ datasource db {
 }
 
 model User {
-  id         String  @unique
-  username   String  @unique
+  id         String      @id @default(uuid())
+  username   String      @unique
   password   String 
   todolists  Todolist[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }
 
 model Todolist {
-  id         String    @unique
-  name       String
-  priority   Int
-  tags       String?   @default("[]") // We will fix this
-  user       User      @relation(fields: [userId], references: [id])
-  userId     String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id             String    @id @default(uuid())
+  name           String
+  priority       Int
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  todolist_tags  Todolist_Tag[]
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Tag {
+  id             String          @id @default(uuid())
+  name           String
+  todolist_tags  Todolist_Tag[]
+}
+
+model Todolist_Tag {
+  todolist     Todolist  @relation(fields: [todolist_id], references: [id], onDelete: Cascade)
+  todolist_id  String    
+  tag          Tag       @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+  tag_id       String     
+  @@id([todolist_id, tag_id])
 }
