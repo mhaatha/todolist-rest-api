@@ -55,7 +55,7 @@ export const errorHandler = (err: ResponseError, req: Request, res: Response, ne
       message: 'Token expired'
     });
   } else if (err instanceof ResponseError) {
-    res.status(StatusCodes.BAD_REQUEST).json({
+    res.status(err.status).json({
       status: err.status,
       error: err.error,
       message: err.message
