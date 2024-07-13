@@ -32,8 +32,10 @@ export const register = async (data: UsernamePasswordRequest): Promise<IdUsernam
 }
 
 export const login = async (data: UsernamePasswordRequest): Promise<User> => {
+  const registerRequest: UsernamePasswordRequest = validate(registerAndLogin, data);
+
   // VALIDATION: Is username exists in the database
-  const user: User | null = await getUserByUsername(data.username);
+  const user: User | null = await getUserByUsername(registerRequest.username);
   if (!user) {
     throw new ResponseError(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, 'Username or password is incorrect');
   }
