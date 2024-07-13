@@ -1,8 +1,8 @@
 import { ZodError } from 'zod';
 import { ResponseError } from '../utils/response-error';
+import { Request, Response } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { Request, Response, NextFunction } from 'express';
 import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken';
 
 const handlePrismaError = (err: PrismaClientKnownRequestError) => {
@@ -22,7 +22,7 @@ const handlePrismaError = (err: PrismaClientKnownRequestError) => {
   }
 };
 
-export const errorHandler = (err: ResponseError, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (err: ResponseError, req: Request, res: Response) => {
   if (err instanceof ZodError) {
     const errors = err.issues.map(issue => ({
       path: issue.path.join('.'),
