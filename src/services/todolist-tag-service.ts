@@ -1,11 +1,11 @@
-import { getTagById } from './tag-service';
-import { getTodolistById } from './todolist-service';
-import { TodolistTagRequest, TodolistTagResponse } from '../models/todolist-tag-model';
-import { todolistTagBodyRequest } from '../validations/todolist-tag-validation';
-import { validate } from '../validations/validation';
-import { ResponseError } from '../utils/response-error';
-import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { prisma } from '../../prisma';
+import { validate } from '../validations/validation';
+import { getTagById } from './tag-service';
+import { ResponseError } from '../utils/response-error';
+import { getTodolistById } from './todolist-service';
+import { todolistTagBodyRequest } from '../validations/todolist-tag-validation';
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
+import { TodolistTagRequest, TodolistTagResponse } from '../models/todolist-tag-model';
 
 export const create = async (data: TodolistTagRequest): Promise<TodolistTagResponse> => {
   const createRequest: TodolistTagRequest = validate(todolistTagBodyRequest, data);

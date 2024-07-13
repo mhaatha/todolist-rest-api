@@ -1,8 +1,8 @@
 import * as service from '../services/todolist-tag-service';
 import { UserRequest } from '../types/user-request';
-import { TodolistTagRequest, TodolistTagResponse } from '../models/todolist-tag-model';
 import { Response, NextFunction } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
+import { TodolistTagRequest, TodolistTagResponse } from '../models/todolist-tag-model';
 
 export const create = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {

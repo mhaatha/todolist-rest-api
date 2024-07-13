@@ -1,11 +1,11 @@
 import * as service from '../services/user-service';
 import { User } from '@prisma/client';
+import { Payload } from '../models/token-model';
 import { UserRequest } from '../types/user-request';
 import { ResponseError } from '../utils/response-error';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { Request, Response, NextFunction } from 'express';
 import { IdUsernameResponse, UsernamePasswordRequest } from '../models/user-model';
-import { Payload } from '../models/token-model';
 
 export const getUsername = async (req: Request, res: Response, next: NextFunction) => {
   try {

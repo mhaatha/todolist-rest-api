@@ -2,8 +2,8 @@ import { Payload } from '../models/token-model';
 import { verifyToken } from '../services/token-service';
 import { UserRequest } from '../types/user-request';
 import { ResponseError } from '../utils/response-error';
-import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { Response, NextFunction } from 'express';
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
 export const auth = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
