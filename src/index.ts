@@ -5,7 +5,7 @@ import { prisma } from '../prisma';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 
 let server: Server<typeof IncomingMessage, typeof ServerResponse> | undefined;
-let port: number = config.port;
+const port: number = config.port;
 
 if (prisma) {
   logger.info('Connected to Database');
