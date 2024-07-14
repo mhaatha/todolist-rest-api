@@ -21,13 +21,29 @@ export const create = async (req: UserRequest, res: Response, next: NextFunction
   }
 }
 
-export const getAll = async (req: UserRequest, res: Response, next: NextFunction) => {
+export const getTodolistByUserId = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
-    const response: TodolistResponse[] = await service.getAll();
+    const { sub } = req.user as Payload;
+    const response: TodolistResponse[] = await service.getAll(sub);
 
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
       message: 'Success get all todolist',
+      data: response
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const getTodolistById = async (req: UserRequest, res: Response, next: NextFunction) => {
+  try {
+    const params: string = req.params.todolistId;
+    const response: TodolistResponse | null = await service.getTodolistById(params);
+
+    return res.status(StatusCodes.OK).json({
+      status: ReasonPhrases.OK,
+      message: 'Success get todolist',
       data: response
     });
   } catch (error) {
