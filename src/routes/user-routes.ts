@@ -4,6 +4,11 @@ import { auth } from '../middlewares/auth-middleware';
 
 const userRoute = express.Router();
 
+// Get current user
+userRoute.route('/')
+  .get(auth, userController.getCurrentUser);
+
+// Get user by username
 userRoute.route('/:username')
   .get(auth, userController.getUsername);
 
