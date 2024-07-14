@@ -12,10 +12,10 @@ userRoute.route('/')
 userRoute.route('/:username')
   .get(auth, userController.getUsername);
 
-userRoute.route('/update')
+userRoute.route('/updates')
   .put(auth, userController.update);
 
-userRoute.route('/delete')
+userRoute.route('/deletes')
   .delete(auth, userController.deleted);
 
 export default userRoute;
