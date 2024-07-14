@@ -30,15 +30,26 @@ export const create = async (data: TodolistRequest, userId: string): Promise<Tod
 }
 
 export const getTodolistById = async (todolistId: string): Promise<TodolistResponse | null> => {
-  return await prisma.todolist.findUnique({
+  const todolist = await prisma.todolist.findUnique({
     where: {
       id: todolistId
     }
   });
+
+  if (!todolist) {
+    throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'Todolist not found');
+  }
+
+  return todolist;
 }
 
-export const getAll = async (): Promise<TodolistResponse[]> => {
-  const todolist: TodolistResponse[] = await prisma.todolist.findMany();
+export const getAll = async (userId: string): Promise<TodolistResponse[]> => {
+  const todolist: TodolistResponse[] = await prisma.todolist.findMany({
+    where: {
+      userId
+    }
+  });
+
   if (todolist.length < 1) {
     throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'Todolist not found');
   }
@@ -50,16 +61,10 @@ export const update = async (data: TodolistRequest, todolistId: string): Promise
   const updateRequest: TodolistRequest = validate(todolistBodyRequest, data);
 
   // VALIDATION: Is todolistId exists in the database
-  const isTodolistExists: TodolistResponse | null = await getTodolistById(todolistId);
-  if (!isTodolistExists) {
-    throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'todolistId not found');
-  }
+  await getTodolistById(todolistId);
 
   // VALIDATION: Is userId exists in the database
-  const user: User | null = await getUserById(updateRequest.userId);
-  if (!user) {
-    throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'userId not found');
-  }
+  await getUserById(updateRequest.userId);
 
   // UPDATE DATA
   const todolist = await prisma.todolist.update({
@@ -74,10 +79,7 @@ export const update = async (data: TodolistRequest, todolistId: string): Promise
 
 export const deleted = async (todolistId: string): Promise<TodolistResponse> => {
   // VALIDATION: Is todolistId exists in the database
-  const isTodolistExists: TodolistResponse | null = await getTodolistById(todolistId);
-  if (!isTodolistExists) {
-    throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'todolistId not found');
-  }
+  await getTodolistById(todolistId);
 
   return await prisma.todolist.delete({
     where: {
