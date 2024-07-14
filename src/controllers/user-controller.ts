@@ -31,15 +31,15 @@ export const getUsername = async (req: Request, res: Response, next: NextFunctio
     const response: User | null = await service.getUserByUsername(data);
 
     if (!response) {
-      throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'Username not found');
+      throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'User not found');
     }
     
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
       message: 'Success get username',
       data: {
-        id: response.id,
-        username: response.username
+        id: response!.id,
+        username: response!.username
       }
     });
   } catch (error) {
@@ -50,14 +50,9 @@ export const getUsername = async (req: Request, res: Response, next: NextFunctio
 export const update = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
     const bodyData: UsernamePasswordRequest = req.body;
-    const userData: Payload | undefined = req.user as Payload;
+    const { sub }: Payload | undefined = req.user as Payload;
 
-    // VALIDATION: Is user authenticated
-    if (userData === undefined) {
-      throw new ResponseError(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, 'Unauthorized');
-    }
-
-    const response: IdUsernameResponse = await service.update(bodyData, userData.sub);
+    const response: IdUsernameResponse = await service.update(bodyData, sub);
 
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
@@ -71,14 +66,9 @@ export const update = async (req: UserRequest, res: Response, next: NextFunction
 
 export const deleted = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
-    const userData: Payload | undefined = req.user as Payload;
+    const { sub }: Payload | undefined = req.user as Payload;
 
-    // VALIDATION: Is user authenticated
-    if (userData === undefined) {
-      throw new ResponseError(StatusCodes.UNAUTHORIZED, ReasonPhrases.UNAUTHORIZED, 'Unauthorized');
-    }
-
-    await service.deleted(userData.sub);
+    await service.deleted(sub);
 
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
