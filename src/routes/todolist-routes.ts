@@ -6,9 +6,10 @@ const todolistRoute = express.Router();
 
 todolistRoute.route('/')
   .post(auth, todolistController.create)
-  .get(auth, todolistController.getAll);
+  .get(auth, todolistController.getTodolistByUserId);
 
 todolistRoute.route('/:todolistId')
+  .get(auth, todolistController.getTodolistById)
   .put(auth, todolistController.update)
   .delete(auth, todolistController.deleted);
 
