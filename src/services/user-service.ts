@@ -15,11 +15,17 @@ export const getUserByUsername = async (username: string): Promise<User | null> 
 }
 
 export const getUserById = async (id: string): Promise<User | null> => {
-  return await prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       id
     }
   });
+
+  if (!user) {
+    throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'User not found');
+  }
+
+  return user;
 }
 
 export const update = async (bodyData: UsernameSchema, bodyParams: string): Promise<IdUsernameResponse> => {
