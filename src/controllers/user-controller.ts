@@ -7,6 +7,24 @@ import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { Request, Response, NextFunction } from 'express';
 import { IdUsernameResponse, UsernamePasswordRequest } from '../models/user-model';
 
+export const getCurrentUser = async (req: UserRequest, res: Response, next: NextFunction) => {
+  try {
+    const { sub } = req.user as Payload;
+    const response: User | null = await service.getUserById(sub);
+
+    return res.status(StatusCodes.OK).json({
+      status: ReasonPhrases.OK,
+      message: 'Success get current user',
+      data: {
+        id: response!.id,
+        username: response!.username
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+} 
+
 export const getUsername = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = req.params.username;
