@@ -37,8 +37,9 @@ export const getTodolistByUserId = async (req: UserRequest, res: Response, next:
 
 export const getTodolistById = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
+    const { sub } = req.user as Payload;
     const params: string = req.params.todolistId;
-    const response: TodolistResponse | null = await service.getTodolistById(params);
+    const response: TodolistResponse | null = await service.getTodolistById(params, sub);
 
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
@@ -52,9 +53,10 @@ export const getTodolistById = async (req: UserRequest, res: Response, next: Nex
 
 export const update = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
+    const { sub } = req.user as Payload;
     const data: TodolistRequest = req.body;
     const params: string = req.params.todolistId;
-    const response: TodolistResponse = await service.update(data, params);
+    const response: TodolistResponse = await service.update(data, params, sub);
 
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
@@ -68,9 +70,10 @@ export const update = async (req: UserRequest, res: Response, next: NextFunction
 
 export const deleted = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
+    const { sub } = req.user as Payload;
     const params: string = req.params.todolistId;
 
-    await service.deleted(params);
+    await service.deleted(params, sub);
 
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
