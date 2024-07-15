@@ -1,12 +1,12 @@
 import * as service from '../services/tag-service';
 import { UserRequest } from '../types/user-request';
-import { TagResponse } from '../models/tag-model';
+import { TagRequest, TagResponse } from '../models/tag-model';
 import { Response, NextFunction } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
 export const create = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
-    const data: string = req.body;
+    const data: TagRequest = req.body;
     const response: TagResponse = await service.create(data);
 
     return res.status(StatusCodes.CREATED).json({
