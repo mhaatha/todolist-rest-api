@@ -7,9 +7,8 @@ import { TodolistRequest, TodolistResponse } from '../models/todolist-model';
 
 export const create = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
-    const { sub }: Payload | undefined = req.user as Payload;
     const data: TodolistRequest = req.body;
-    const response: TodolistResponse = await service.create(data, sub);
+    const response: TodolistResponse = await service.create(data);
 
     return res.status(StatusCodes.CREATED).json({
       status: ReasonPhrases.CREATED,
