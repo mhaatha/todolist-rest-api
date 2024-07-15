@@ -8,11 +8,11 @@ import { todolistBodyRequest } from '../validations/todolist-validation';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { TodolistRequest, TodolistResponse } from '../models/todolist-model';
 
-export const create = async (data: TodolistRequest, userId: string): Promise<TodolistResponse> => {
+export const create = async (data: TodolistRequest): Promise<TodolistResponse> => {
   const createRequest: TodolistRequest = validate(todolistBodyRequest, data);
 
   // VALIDATION: Is userId exists in the database
-  const user: User | null = await getUserById(userId);
+  const user: User | null = await getUserById(createRequest.userId);
   if (!user) {
     throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'userId not found');
   }
@@ -22,7 +22,7 @@ export const create = async (data: TodolistRequest, userId: string): Promise<Tod
       id: v4(),
       name: createRequest.name,
       priority: createRequest.priority,
-      userId
+      userId: createRequest.userId
     }
   });
 
