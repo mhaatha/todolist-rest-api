@@ -7,11 +7,11 @@ import { todolistTagBodyRequest } from '../validations/todolist-tag-validation';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { TodolistTagRequest, TodolistTagResponse } from '../models/todolist-tag-model';
 
-export const create = async (data: TodolistTagRequest): Promise<TodolistTagResponse> => {
+export const create = async (data: TodolistTagRequest, userId: string): Promise<TodolistTagResponse> => {
   const createRequest: TodolistTagRequest = validate(todolistTagBodyRequest, data);
   
   // VALIDATION: Is todolistId exists in the database
-  const todolist = await getTodolistById(createRequest.todolistId);
+  const todolist = await getTodolistById(createRequest.todolistId, userId);
   if (!todolist) {
     throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'todolistId not found');
   }
@@ -41,11 +41,11 @@ export const getAll = async (): Promise<TodolistTagResponse[]> => {
   return todolistTag;
 }
 
-export const update = async (data: TodolistTagRequest, todolistId: string, tagId: string): Promise<TodolistTagResponse> => {
+export const update = async (data: TodolistTagRequest, todolistId: string, tagId: string, userId: string): Promise<TodolistTagResponse> => {
   const updateRequest: TodolistTagRequest = validate(todolistTagBodyRequest, data);
 
   // VALIDATION: Is todolistId exists in the database
-  const todolist = await getTodolistById(todolistId);
+  const todolist = await getTodolistById(todolistId, userId);
   if (!todolist) {
     throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'todolistId not found');
   }
@@ -73,9 +73,9 @@ export const update = async (data: TodolistTagRequest, todolistId: string, tagId
   return updatedTodolistTag;
 }
 
-export const deleted = async (todolistId: string, tagId: string): Promise<TodolistTagResponse> => {
+export const deleted = async (todolistId: string, tagId: string, userId: string): Promise<TodolistTagResponse> => {
   // VALIDATION: Is todolistId exists in the database
-  const todolist = await getTodolistById(todolistId);
+  const todolist = await getTodolistById(todolistId, userId);
   if (!todolist) {
     throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'todolistId not found');
   }
