@@ -20,9 +20,9 @@ export const getUserById = async (id: string): Promise<User | null> => {
       id
     }
   });
-
+  
   if (!user) {
-    throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'User not');
+    throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'User not found');
   }
 
   return user;
