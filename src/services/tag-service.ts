@@ -20,11 +20,17 @@ export const create = async (data: TagRequest): Promise<TagResponse> => {
 }
 
 export const getTagById = async (id: string): Promise<TagResponse | null> => {
-  return await prisma.tag.findUnique({
+  const tag: TagResponse | null = await prisma.tag.findUnique({
     where: {
       id
     }
   });
+
+  if (!tag) {
+    throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'Tag not found');
+  }
+
+  return tag;
 }
 
 export const getAll = async (): Promise<TagResponse[]> => {
@@ -36,14 +42,11 @@ export const getAll = async (): Promise<TagResponse[]> => {
   return tag;
 }
 
-export const update = async (data: string, tagId: string): Promise<TagResponse> => {
-  const updateRequest: string = validate(tagBodyRequest, data);
+export const update = async (data: TagRequest, tagId: string): Promise<TagResponse> => {
+  const updateRequest: TagRequest = validate(tagBodyRequest, data);
 
   // VALIDATION: Check if tag exist
-  const tag = await getTagById(tagId);
-  if (!tag) {
-    throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'Tag not found');
-  }
+  await getTagById(tagId);
 
   // UPDATE DATA
   const updatedTag = await prisma.tag.update({
@@ -51,7 +54,7 @@ export const update = async (data: string, tagId: string): Promise<TagResponse> 
       id: tagId
     },
     data: {
-      name: updateRequest
+      name: updateRequest.name
     }
   });
 
