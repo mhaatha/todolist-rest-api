@@ -11,21 +11,21 @@ export const create = async (data: TodolistTagRequest, userId: string): Promise<
   const createRequest: TodolistTagRequest = validate(todolistTagBodyRequest, data);
   
   // VALIDATION: Is todolistId exists in the database
-  const todolist = await getTodolistById(createRequest.todolistId, userId);
+  const todolist = await getTodolistById(createRequest.todolist_id, userId);
   if (!todolist) {
     throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'todolistId not found');
   }
 
   // VALIDATION: Is tagId exists in the database
-  const tag = await getTagById(createRequest.tagId);
+  const tag = await getTagById(createRequest.tag_id);
   if (!tag) {
     throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'tagId not found');
   }
 
   const todolistTag = await prisma.todolist_Tag.create({
     data: {
-      todolist_id: createRequest.todolistId,
-      tag_id: createRequest.tagId
+      todolist_id: createRequest.todolist_id,
+      tag_id: createRequest.tag_id
     }
   });
 
@@ -51,7 +51,7 @@ export const update = async (data: TodolistTagRequest, todolistId: string, tagId
   }
 
   // VALIDATION: Is tagId exists in the database
-  const tag = await getTagById(updateRequest.tagId);
+  const tag = await getTagById(updateRequest.tag_id);
   if (!tag) {
     throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'tagId not found');
   }
@@ -65,8 +65,8 @@ export const update = async (data: TodolistTagRequest, todolistId: string, tagId
       }
     },
     data: {
-      todolist_id: updateRequest.todolistId,
-      tag_id: updateRequest.tagId
+      todolist_id: updateRequest.todolist_id,
+      tag_id: updateRequest.tag_id
     }
   });
 
