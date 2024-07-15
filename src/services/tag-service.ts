@@ -1,18 +1,18 @@
 import { v4 } from 'uuid';
 import { prisma } from '../../prisma';
 import { validate } from '../validations/validation';
-import { TagResponse } from '../models/tag-model';
+import { TagRequest, TagResponse } from '../models/tag-model';
 import { ResponseError } from '../utils/response-error';
 import { tagBodyRequest } from '../validations/tag-validation';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
-export const create = async (data: string): Promise<TagResponse> => {
-  const createRequest: string = validate(tagBodyRequest, data);
+export const create = async (data: TagRequest): Promise<TagResponse> => {
+  const createRequest: TagRequest = validate(tagBodyRequest, data);
 
   const tag = await prisma.tag.create({
     data: {
       id: v4(),
-      name: createRequest
+      name: createRequest.name
     }
   });
 
