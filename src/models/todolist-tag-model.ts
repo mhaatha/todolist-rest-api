@@ -1,6 +1,6 @@
 export interface TodolistTagRequest {
-  todolistId: string;
-  tagId: string;
+  todolist_id: string;
+  tag_id: string;
 }
 
 export interface TodolistTagResponse {
