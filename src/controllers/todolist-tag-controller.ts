@@ -1,4 +1,5 @@
 import * as service from '../services/todolist-tag-service';
+import { Payload } from '../models/token-model';
 import { UserRequest } from '../types/user-request';
 import { Response, NextFunction } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
@@ -6,8 +7,9 @@ import { TodolistTagRequest, TodolistTagResponse } from '../models/todolist-tag-
 
 export const create = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
+    const { sub } = req.user as Payload;
     const data: TodolistTagRequest = req.body;
-    const response: TodolistTagResponse = await service.create(data);
+    const response: TodolistTagResponse = await service.create(data, sub);
 
     return res.status(StatusCodes.CREATED).json({
       status: ReasonPhrases.CREATED,
@@ -35,9 +37,10 @@ export const getAll = async (req: UserRequest, res: Response, next: NextFunction
 
 export const update = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
+    const { sub } = req.user as Payload;
     const { todolist_id, tag_id } = req.params;
     const data: TodolistTagRequest = req.body;
-    const response: TodolistTagResponse = await service.update(data, todolist_id, tag_id);
+    const response: TodolistTagResponse = await service.update(data, todolist_id, tag_id, sub);
 
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
@@ -51,9 +54,10 @@ export const update = async (req: UserRequest, res: Response, next: NextFunction
 
 export const deleted = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
+    const { sub } = req.user as Payload;
     const { todolist_id, tag_id } = req.params;
 
-    await service.deleted(todolist_id, tag_id);
+    await service.deleted(todolist_id, tag_id, sub);
 
     return res.status(StatusCodes.OK).json({
       status: ReasonPhrases.OK,
