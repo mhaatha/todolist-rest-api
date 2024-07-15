@@ -9,6 +9,7 @@ tagRoute.route('/')
   .get(auth, tagController.getAll);
 
 tagRoute.route('/:tagId')
+  .get(auth, tagController.getById)
   .put(auth, tagController.update)
   .delete(auth, tagController.deleted);
 
