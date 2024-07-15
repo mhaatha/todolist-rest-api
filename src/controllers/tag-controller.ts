@@ -33,9 +33,24 @@ export const getAll = async (req: UserRequest, res: Response, next: NextFunction
   }
 }
 
+export const getById = async (req: UserRequest, res: Response, next: NextFunction) => {
+  try {
+    const params = req.params.tagId;
+    const response: TagResponse | null = await service.getTagById(params);
+
+    return res.status(StatusCodes.OK).json({
+      status: ReasonPhrases.OK,
+      message: 'Success get tag by id',
+      data: response
+    });
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const update = async (req: UserRequest, res: Response, next: NextFunction) => {
   try {
-    const data: string = req.body;
+    const data: TagRequest = req.body;
     const params: string = req.params.tagId;
     const response: TagResponse = await service.update(data, params);
 
