@@ -29,10 +29,13 @@ export const create = async (data: TodolistRequest): Promise<TodolistResponse> =
   return todolist;
 }
 
-export const getTodolistById = async (todolistId: string): Promise<TodolistResponse | null> => {
-  const todolist = await prisma.todolist.findUnique({
+export const getTodolistById = async (todolistId: string, userId: string): Promise<TodolistResponse | null> => {
+  const todolist = await prisma.todolist.findFirst({
     where: {
-      id: todolistId
+      AND: {
+        id: todolistId,
+        userId: userId
+      }
     }
   });
 
@@ -57,11 +60,11 @@ export const getAll = async (userId: string): Promise<TodolistResponse[]> => {
   return todolist;
 }
 
-export const update = async (data: TodolistRequest, todolistId: string): Promise<TodolistResponse> => {
+export const update = async (data: TodolistRequest, todolistId: string, userId: string): Promise<TodolistResponse> => {
   const updateRequest: TodolistRequest = validate(todolistBodyRequest, data);
 
   // VALIDATION: Is todolistId exists in the database
-  await getTodolistById(todolistId);
+  await getTodolistById(todolistId, userId);
 
   // VALIDATION: Is userId exists in the database
   await getUserById(updateRequest.userId);
@@ -77,9 +80,9 @@ export const update = async (data: TodolistRequest, todolistId: string): Promise
   return todolist;
 }
 
-export const deleted = async (todolistId: string): Promise<TodolistResponse> => {
+export const deleted = async (todolistId: string, userId: string): Promise<TodolistResponse> => {
   // VALIDATION: Is todolistId exists in the database
-  await getTodolistById(todolistId);
+  await getTodolistById(todolistId, userId);
 
   return await prisma.todolist.delete({
     where: {
