@@ -12,15 +12,9 @@ export const create = async (data: TodolistTagRequest, userId: string): Promise<
   
   // VALIDATION: Is todolistId exists in the database
   const todolist = await getTodolistById(createRequest.todolist_id, userId);
-  if (!todolist) {
-    throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'todolistId not found');
-  }
 
   // VALIDATION: Is tagId exists in the database
   const tag = await getTagById(createRequest.tag_id);
-  if (!tag) {
-    throw new ResponseError(StatusCodes.NOT_FOUND, ReasonPhrases.NOT_FOUND, 'tagId not found');
-  }
 
   const todolistTag = await prisma.todolist_Tag.create({
     data: {
